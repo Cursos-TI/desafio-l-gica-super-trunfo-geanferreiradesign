@@ -27,8 +27,11 @@ int main() {
     float densidade2;
     float pib_per_capita2;
 
-    // Variável para o Menu
-    int opcao;
+    // Variáveis para o Menu e Lógica Mestre
+    int opcao1, opcao2;
+    float val1_carta1, val1_carta2;
+    float val2_carta1, val2_carta2;
+    int pontos_carta1 = 0, pontos_carta2 = 0;
 
     // ==========================================
     // Cadastro da Carta 1
@@ -55,10 +58,8 @@ int main() {
     printf("Número de Pontos Turísticos: ");
     scanf("%d", &pontos_turisticos1);
 
-    // Cálculos da Carta 1
     densidade1 = (float) populacao1 / area1;
     pib_per_capita1 = pib1 / (float) populacao1;
-
     printf("\n");
 
     // ==========================================
@@ -86,100 +87,84 @@ int main() {
     printf("Número de Pontos Turísticos: ");
     scanf("%d", &pontos_turisticos2);
 
-    // Cálculos da Carta 2
     densidade2 = (float) populacao2 / area2;
     pib_per_capita2 = pib2 / (float) populacao2;
-
     printf("\n");
 
     // ==========================================
-    // Menu Interativo
+    // Menus Dinâmicos (Nível Mestre)
     // ==========================================
-    printf("=== Menu de Comparação ===\n");
-    printf("Escolha um atributo para comparar as cartas:\n");
-    printf("1 - População\n");
-    printf("2 - Área\n");
-    printf("3 - PIB\n");
-    printf("4 - Pontos Turísticos\n");
-    printf("5 - Densidade Populacional (Menor vence!)\n");
-    printf("Opção: ");
-    scanf("%d", &opcao);
+    printf("=== Menu de Batalha (Nível Mestre) ===\n");
+    printf("Escolha o PRIMEIRO atributo para comparar:\n");
+    printf("1 - População\n2 - Área\n3 - PIB\n4 - Pontos Turísticos\n5 - Densidade Populacional\n");
+    printf("Opção 1: ");
+    scanf("%d", &opcao1);
 
-    printf("\n");
+    printf("\nEscolha o SEGUNDO atributo (diferente do primeiro):\n");
+    printf("1 - População\n2 - Área\n3 - PIB\n4 - Pontos Turísticos\n5 - Densidade Populacional\n");
+    printf("Opção 2: ");
+    scanf("%d", &opcao2);
+
+    // Estrutura de decisão para barrar atributos iguais
+    if (opcao1 == opcao2) {
+        printf("\nErro: Você escolheu o mesmo atributo duas vezes! O jogo foi cancelado.\n");
+        return 0; // Encerra o programa
+    }
 
     // ==========================================
-    // Lógica de Comparação com Switch
+    // Extraindo valores do 1º Atributo
     // ==========================================
-    switch (opcao) {
-        case 1:
-            printf("--- Comparação de cartas (Atributo: População) ---\n");
-            printf("Carta 1 - %s: %d\n", nome1, populacao1);
-            printf("Carta 2 - %s: %d\n", nome2, populacao2);
-            if (populacao1 > populacao2) {
-                printf("Resultado: Carta 1 (%s) venceu!\n", nome1);
-            } else if (populacao2 > populacao1) {
-                printf("Resultado: Carta 2 (%s) venceu!\n", nome2);
-            } else {
-                printf("Resultado: Empate!\n");
-            }
-            break;
+    switch (opcao1) {
+        case 1: val1_carta1 = populacao1; val1_carta2 = populacao2; break;
+        case 2: val1_carta1 = area1; val1_carta2 = area2; break;
+        case 3: val1_carta1 = pib1; val1_carta2 = pib2; break;
+        case 4: val1_carta1 = pontos_turisticos1; val1_carta2 = pontos_turisticos2; break;
+        case 5: val1_carta1 = densidade1; val1_carta2 = densidade2; break;
+        default: printf("Opção 1 inválida!\n"); return 0;
+    }
 
-        case 2:
-            printf("--- Comparação de cartas (Atributo: Área) ---\n");
-            printf("Carta 1 - %s: %.2f km²\n", nome1, area1);
-            printf("Carta 2 - %s: %.2f km²\n", nome2, area2);
-            if (area1 > area2) {
-                printf("Resultado: Carta 1 (%s) venceu!\n", nome1);
-            } else if (area2 > area1) {
-                printf("Resultado: Carta 2 (%s) venceu!\n", nome2);
-            } else {
-                printf("Resultado: Empate!\n");
-            }
-            break;
+    // ==========================================
+    // Extraindo valores do 2º Atributo
+    // ==========================================
+    switch (opcao2) {
+        case 1: val2_carta1 = populacao1; val2_carta2 = populacao2; break;
+        case 2: val2_carta1 = area1; val2_carta2 = area2; break;
+        case 3: val2_carta1 = pib1; val2_carta2 = pib2; break;
+        case 4: val2_carta1 = pontos_turisticos1; val2_carta2 = pontos_turisticos2; break;
+        case 5: val2_carta1 = densidade1; val2_carta2 = densidade2; break;
+        default: printf("Opção 2 inválida!\n"); return 0;
+    }
 
-        case 3:
-            printf("--- Comparação de cartas (Atributo: PIB) ---\n");
-            printf("Carta 1 - %s: %.2f\n", nome1, pib1);
-            printf("Carta 2 - %s: %.2f\n", nome2, pib2);
-            if (pib1 > pib2) {
-                printf("Resultado: Carta 1 (%s) venceu!\n", nome1);
-            } else if (pib2 > pib1) {
-                printf("Resultado: Carta 2 (%s) venceu!\n", nome2);
-            } else {
-                printf("Resultado: Empate!\n");
-            }
-            break;
+    // ==========================================
+    // Lógica de Decisão Complexa + Operador Ternário
+    // Sintaxe do Ternário: (condição) ? valor_se_verdadeiro : valor_se_falso;
+    // ==========================================
+    
+    // Processando pontos do 1º Atributo (Se for densidade, a regra inverte: menor ganha)
+    pontos_carta1 += (opcao1 == 5) ? (val1_carta1 < val1_carta2 ? 1 : 0) : (val1_carta1 > val1_carta2 ? 1 : 0);
+    pontos_carta2 += (opcao1 == 5) ? (val1_carta2 < val1_carta1 ? 1 : 0) : (val1_carta2 > val1_carta1 ? 1 : 0);
 
-        case 4:
-            printf("--- Comparação de cartas (Atributo: Pontos Turísticos) ---\n");
-            printf("Carta 1 - %s: %d\n", nome1, pontos_turisticos1);
-            printf("Carta 2 - %s: %d\n", nome2, pontos_turisticos2);
-            if (pontos_turisticos1 > pontos_turisticos2) {
-                printf("Resultado: Carta 1 (%s) venceu!\n", nome1);
-            } else if (pontos_turisticos2 > pontos_turisticos1) {
-                printf("Resultado: Carta 2 (%s) venceu!\n", nome2);
-            } else {
-                printf("Resultado: Empate!\n");
-            }
-            break;
+    // Processando pontos do 2º Atributo
+    pontos_carta1 += (opcao2 == 5) ? (val2_carta1 < val2_carta2 ? 1 : 0) : (val2_carta1 > val2_carta2 ? 1 : 0);
+    pontos_carta2 += (opcao2 == 5) ? (val2_carta2 < val2_carta1 ? 1 : 0) : (val2_carta2 > val2_carta1 ? 1 : 0);
 
-        case 5:
-            printf("--- Comparação de cartas (Atributo: Densidade Populacional) ---\n");
-            printf("Carta 1 - %s: %.2f hab/km²\n", nome1, densidade1);
-            printf("Carta 2 - %s: %.2f hab/km²\n", nome2, densidade2);
-            // ATENÇÃO: Aqui a lógica inverte, o MENOR vence!
-            if (densidade1 < densidade2) {
-                printf("Resultado: Carta 1 (%s) venceu!\n", nome1);
-            } else if (densidade2 < densidade1) {
-                printf("Resultado: Carta 2 (%s) venceu!\n", nome2);
-            } else {
-                printf("Resultado: Empate!\n");
-            }
-            break;
+    // ==========================================
+    // Exibição Final com If/Else Aninhados
+    // ==========================================
+    printf("\n=== RESULTADO FINAL ===\n");
+    printf("Análise do 1º Atributo: Carta 1 (%.2f) vs Carta 2 (%.2f)\n", val1_carta1, val1_carta2);
+    printf("Análise do 2º Atributo: Carta 1 (%.2f) vs Carta 2 (%.2f)\n", val2_carta1, val2_carta2);
+    printf("\nPontuação Total:\nCarta 1 (%s): %d ponto(s)\nCarta 2 (%s): %d ponto(s)\n\n", nome1, pontos_carta1, nome2, pontos_carta2);
 
-        default:
-            printf("Opção inválida! Por favor, escolha um número de 1 a 5 no menu.\n");
-            break;
+    if (pontos_carta1 > pontos_carta2) {
+        printf("🏆 GRANDE VENCEDORA: Carta 1 (%s)!\n", nome1);
+    } else if (pontos_carta2 > pontos_carta1) {
+        printf("🏆 GRANDE VENCEDORA: Carta 2 (%s)!\n", nome2);
+    } else {
+        // Bloco aninhado para tratar o empate
+        if (pontos_carta1 == pontos_carta2) {
+            printf("⚖️ DEU EMPATE! Ambas as cartas venceram em 1 atributo.\n");
+        }
     }
 
     return 0;
